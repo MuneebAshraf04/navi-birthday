@@ -126,6 +126,7 @@ section { scroll-margin-top: 74px; }
   display: grid;
   gap: clamp(22px, 5vw, 42px);
   min-height: calc(100svh - 58px);
+  align-content: start;
   padding: clamp(18px, 5vw, 46px) var(--page-pad) clamp(48px, 10vw, 90px);
 }
 
@@ -133,7 +134,7 @@ section { scroll-margin-top: 74px; }
 
 .cover__portrait {
   position: relative;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1 / 1;
   margin: 0;
   overflow: hidden;
   background: var(--pink-wash);
@@ -626,7 +627,7 @@ h2 {
 
 @media (max-width: 619px) {
   .cover { gap: 16px; }
-  .cover__portrait { aspect-ratio: 5 / 3; }
+  .cover__portrait { aspect-ratio: 1 / 1; }
   h1 { font-size: clamp(40px, 10vw, 48px); }
 }
 
