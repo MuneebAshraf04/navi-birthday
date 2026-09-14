@@ -1,227 +1,118 @@
-$(window).load(function(){
-	$('.loading').fadeOut('fast');
-	$('.container').fadeIn('fast');
-});
-$('document').ready(function(){
-		var vw;
-		$(window).resize(function(){
-			 vw = $(window).width()/2;
-			$('#b1,#b2,#b3,#b4,#b5,#b6,#b7').stop();
-			$('#b11').animate({top:240, left: vw-350},500);
-			$('#b22').animate({top:240, left: vw-250},500);
-			$('#b33').animate({top:240, left: vw-150},500);
-			$('#b44').animate({top:240, left: vw-50},500);
-			$('#b55').animate({top:240, left: vw+50},500);
-			$('#b66').animate({top:240, left: vw+150},500);
-			$('#b77').animate({top:240, left: vw+250},500);
-		});
+(function () {
+  "use strict";
 
-	$('#turn_on').click(function(){
-		$('#bulb_yellow').addClass('bulb-glow-yellow');
-		$('#bulb_red').addClass('bulb-glow-red');
-		$('#bulb_blue').addClass('bulb-glow-blue');
-		$('#bulb_green').addClass('bulb-glow-green');
-		$('#bulb_pink').addClass('bulb-glow-pink');
-		$('#bulb_orange').addClass('bulb-glow-orange');
-		$('body').addClass('peach');
-		$(this).fadeOut('slow').delay(5000).promise().done(function(){
-			$('#play').fadeIn('slow');
-		});
-	});
-	$('#play').click(function(){
-		var audio = $('.song')[0];
-        audio.play();
-        $('#bulb_yellow').addClass('bulb-glow-yellow-after');
-		$('#bulb_red').addClass('bulb-glow-red-after');
-		$('#bulb_blue').addClass('bulb-glow-blue-after');
-		$('#bulb_green').addClass('bulb-glow-green-after');
-		$('#bulb_pink').addClass('bulb-glow-pink-after');
-		$('#bulb_orange').addClass('bulb-glow-orange-after');
-		$('body').css('backgroud-color','#FFF');
-		$('body').addClass('peach-after');
-		$(this).fadeOut('slow').delay(6000).promise().done(function(){
-			$('#bannar_coming').fadeIn('slow');
-		});
-	});
+  const audio = document.getElementById("bg-audio");
+  const openButton = document.getElementById("open-surprise");
+  const replayButton = document.getElementById("replay");
+  const soundDock = document.getElementById("sound-dock");
+  const soundStatus = document.getElementById("sound-status");
+  const audioToggle = document.getElementById("audio-toggle");
+  const audioMute = document.getElementById("audio-mute");
+  const dialog = document.getElementById("photo-dialog");
+  const dialogImage = document.getElementById("photo-dialog-image");
+  const dialogTitle = document.getElementById("photo-dialog-title");
 
-	$('#bannar_coming').click(function(){
-		$('.bannar').addClass('bannar-come');
+  const setSoundDock = (visible) => {
+    if (!soundDock) return;
+    soundDock.hidden = !visible;
+  };
 
-		$(this).fadeOut('slow').delay(6000).promise().done(function(){
-			$('#balloons_flying').fadeIn('slow');
+  const updateAudioUi = () => {
+    if (!audio || !audioToggle || !audioMute) return;
+    const playing = !audio.paused;
+    const muted = audio.muted;
+    soundDock.classList.toggle("is-playing", playing);
+    audioToggle.setAttribute("aria-pressed", String(playing));
+    audioToggle.setAttribute("aria-label", playing ? "Pause birthday soundtrack" : "Play birthday soundtrack");
+    audioToggle.title = playing ? "Pause birthday soundtrack" : "Play birthday soundtrack";
+    audioToggle.querySelector("span").textContent = playing ? "Ⅱ" : "▶";
+    audioMute.setAttribute("aria-pressed", String(muted));
+    audioMute.setAttribute("aria-label", muted ? "Unmute birthday soundtrack" : "Mute birthday soundtrack");
+    audioMute.title = muted ? "Unmute birthday soundtrack" : "Mute birthday soundtrack";
+    audioMute.querySelector("span").textContent = muted ? "◌" : "◖";
+    soundStatus.textContent = muted ? "Soundtrack muted" : playing ? "Birthday soundtrack" : "Soundtrack paused";
+  };
 
-		// Show the album photos
-		$('.album-photo').fadeIn('slow');
+  const startAudio = () => {
+    if (!audio) return;
+    setSoundDock(true);
+    audio.play().then(updateAudioUi).catch(() => {
+      soundStatus.textContent = "Tap play for the soundtrack";
+      updateAudioUi();
+    });
+  };
 
-		$('.can-zoom').fadeIn('slow');
+  openButton?.addEventListener("click", () => {
+    startAudio();
+    document.getElementById("welcome")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
-		});
-	});
+  audioToggle?.addEventListener("click", () => {
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+    updateAudioUi();
+  });
 
-	function loopOne() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b1').animate({left:randleft,bottom:randtop},10000,function(){
-			loopOne();
-		});
-	}
-	function loopTwo() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b2').animate({left:randleft,bottom:randtop},10000,function(){
-			loopTwo();
-		});
-	}
-	function loopThree() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b3').animate({left:randleft,bottom:randtop},10000,function(){
-			loopThree();
-		});
-	}
-	function loopFour() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b4').animate({left:randleft,bottom:randtop},10000,function(){
-			loopFour();
-		});
-	}
-	function loopFive() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b5').animate({left:randleft,bottom:randtop},10000,function(){
-			loopFive();
-		});
-	}
+  audioMute?.addEventListener("click", () => {
+    if (!audio) return;
+    audio.muted = !audio.muted;
+    updateAudioUi();
+  });
 
-	function loopSix() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b6').animate({left:randleft,bottom:randtop},10000,function(){
-			loopSix();
-		});
-	}
-	function loopSeven() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b7').animate({left:randleft,bottom:randtop},10000,function(){
-			loopSeven();
-		});
-	}
-	function loopEight() {
-		var randleft = 1000*Math.random();
-		var randtop = 500*Math.random();
-		$('#b7').animate({left:randleft,bottom:randtop},10000,function(){
-			loopSeven();
-		});
-	}
+  audio?.addEventListener("play", updateAudioUi);
+  audio?.addEventListener("pause", updateAudioUi);
+  audio?.addEventListener("volumechange", updateAudioUi);
 
-	$('#balloons_flying').click(function(){
-		$('.balloon-border').animate({top:-500},8000);
-		$('#b1,#b4,#b5,#b7').addClass('balloons-rotate-behaviour-one');
-		$('#b2,#b3,#b6',).addClass('balloons-rotate-behaviour-two');
-		// $('#b3').addClass('balloons-rotate-behaviour-two');
-		// $('#b4').addClass('balloons-rotate-behaviour-one');
-		// $('#b5').addClass('balloons-rotate-behaviour-one');
-		// $('#b6').addClass('balloons-rotate-behaviour-two');
-		// $('#b7').addClass('balloons-rotate-behaviour-one');
-		loopOne();
-		loopTwo();
-		loopThree();
-		loopFour();
-		loopFive();
-		loopSix();
-		loopSeven();
-		// loopEight();
+  replayButton?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (audio) audio.currentTime = 0;
+  });
 
-		$(this).fadeOut('slow').delay(5000).promise().done(function(){
-			$('#cake_fadein').fadeIn('slow');
-		});
-	});	
+  document.querySelectorAll(".photo-trigger").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const image = trigger.querySelector("img");
+      if (!image || !dialog || !dialogImage) return;
+      dialogImage.src = trigger.dataset.photo || image.currentSrc || image.src;
+      dialogImage.alt = image.alt;
+      dialogTitle.textContent = trigger.dataset.caption || "Navi";
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+        document.body.classList.add("dialog-open");
+      }
+    });
+  });
 
-	$('#cake_fadein').click(function(){
-		$('.cake').fadeIn('slow');
-		$(this).fadeOut('slow').delay(3000).promise().done(function(){
-			$('#light_candle').fadeIn('slow');
-		});
-	});
+  const resetDialog = () => {
+    document.body.classList.remove("dialog-open");
+    dialogImage.removeAttribute("src");
+  };
 
-	$('#light_candle').click(function(){
-		$('.fuego').fadeIn('slow');
-		$(this).fadeOut('slow').promise().done(function(){
-			$('#wish_message').fadeIn('slow');
-		});
-	});
+  dialog?.addEventListener("close", resetDialog);
+  dialog?.addEventListener("cancel", resetDialog);
+  dialog?.querySelector("form")?.addEventListener("submit", resetDialog);
 
-		
-	$('#wish_message').click(function(){
-		 vw = $(window).width()/2;
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      dialog.close();
+      resetDialog();
+    }
+  });
 
-		$('#b1,#b2,#b3,#b4,#b5,#b6,#b7').stop();
-		$('#b1').attr('id','b11');
-		$('#b2').attr('id','b22')
-		$('#b3').attr('id','b33')
-		$('#b4').attr('id','b44')
-		$('#b5').attr('id','b55')
-		$('#b6').attr('id','b66')
-		$('#b7').attr('id','b77')
-		$('#b11').animate({top:240, left: vw-350},500);
-		$('#b22').animate({top:240, left: vw-250},500);
-		$('#b33').animate({top:240, left: vw-150},500);
-		$('#b44').animate({top:240, left: vw-50},500);
-		$('#b55').animate({top:240, left: vw+50},500);
-		$('#b66').animate({top:240, left: vw+150},500);
-		$('#b77').animate({top:240, left: vw+250},500);
-		$('.balloons').css('opacity','0.9');
-		$('.balloons h2').fadeIn(3000);
-		$(this).fadeOut('slow').delay(3000).promise().done(function(){
-			$('#story').fadeIn('slow');
-		});
-	});
-	
-	$('#story').click(function(){
-		$(this).fadeOut('slow');
-		$('.cake').fadeOut('fast').promise().done(function(){
-			$('.message').fadeIn('slow');
-		});
-
-		var $messages = $(".message p");   // only inside .message
-		var totalMessages = $messages.length;
-
-		function msgLoop(i) {
-			if (i < totalMessages - 1) {
-				$messages.eq(i).fadeIn('slow').delay(1500).fadeOut('slow').promise().done(function(){
-					msgLoop(i + 1);
-				});
-			} else {
-				// Last message stays + cake comes back
-				$messages.eq(i).fadeIn('slow').promise().done(function(){
-					$('.cake').fadeIn('fast');
-				});
-			}
-		}
-
-		msgLoop(0);
-	});
-
-});
-
-// Zoom (lightbox) feature
-$('.album-photo').click(function() {
-    var src = $(this).attr('src');
-    $('#lightbox img').attr('src', src);
-
-    // Force flex only when showing
-    $('#lightbox').css('display', 'flex').hide().fadeIn('fast');
-});
-
-// Close when clicking outside image
-$('#lightbox').click(function(e) {
-    if (e.target !== this) return; // only close if background clicked
-    $('#lightbox').fadeOut('fast');
-});
-
-
-
-
-//alert('hello');
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  } else {
+    document.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
+  }
+})();
